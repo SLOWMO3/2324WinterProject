@@ -7,7 +7,7 @@ public class Phone {
 	 
    this.name = name;
    this.tel = tel;
-   //메롱
+   //메롱ㅗㅗㅗ
  }
  
 }
