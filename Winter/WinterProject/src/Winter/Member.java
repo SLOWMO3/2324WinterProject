@@ -5,6 +5,7 @@ import java.util.*;
 public class Member {
 	private int id;				//회원가입, 로그인할때 쓸 아이디
 	private String nickname;	//닉네임
+	private int coupaymoney = 0;    //보유하고있는 쿠페이머니 잔액
 	
 	public Member(int id, String nickname) {
 		this.id = id;
@@ -15,6 +16,7 @@ public class Member {
 	private int total_PA; 		//총구매액(purchase amount)
 	private int total_SA; 		//총판매액(sales amount)
 	
+	
 	//get/set 메소드
 	public int get_id() { return id; }
 	public void set_id(int id) { this.id = id; }
@@ -24,6 +26,13 @@ public class Member {
 	public void setTotal_PA(int total_PA) { this.total_PA = total_PA; }
 	public int getTotal_SA() { return total_SA; }
 	public void setTotal_SA(int total_SA) { this.total_SA = total_SA; }
+	
+	public int getCoupaymoney() {
+		return coupaymoney;
+	}
+	public void setCoupaymoney(int coupaymoney) {
+		this.coupaymoney = coupaymoney;
+	}
 	
 	//구매, 판매 상품 리스트
 	List<Product> my_Purchase = new ArrayList<>();
