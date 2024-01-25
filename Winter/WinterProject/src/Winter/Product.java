@@ -12,6 +12,12 @@ public class Product {
 		this.quantity = quantity;
 	}
 	
+	public Product(String p_name, int quantity) {
+		// TODO Auto-generated constructor stub
+		this.p_name = p_name;
+		this.quantity = quantity;
+	}
+
 	//get/set 메소드
 	public String get_p_name() { return p_name; }
 	public void set_p_name(String p_name) { this.p_name = p_name; }
