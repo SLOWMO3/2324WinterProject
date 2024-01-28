@@ -1,7 +1,7 @@
-package Winter;
+package Winter.WinterProject.src.Winter;
 
 import java.util.*;
-// ㅇㅂㄹㅈㄷㅎㅈㅎㅈㄷㄹㄷㄱㄶㄱㄹㅈ겨혿쟈려개ㅓ해ㅓ
+
 public class Coupang {
 	Scanner scan = new Scanner(System.in); // 스캐너 : scan
 	List<Member> mem_list = new ArrayList<>(); //전체 회원 리스트

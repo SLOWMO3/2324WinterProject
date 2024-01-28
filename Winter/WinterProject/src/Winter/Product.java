@@ -1,4 +1,4 @@
-package Winter;
+package Winter.WinterProject.src.Winter;
 
 public class Product {
 	private String p_name;	//상품명(product name)
