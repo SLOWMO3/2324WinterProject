@@ -7,7 +7,8 @@ public class CoupangApp {
 		Coupang coupang = new Coupang();
 
 		System.out.println("나는 승민");
-		
+		System.out.println("나는 의태");
+
 		//실행시 1.로그인 2.회원가입
 		coupang.start();
 		
