@@ -8,6 +8,7 @@ public class CoupangApp {
 
 		System.out.println("변경 사항 생성");
 		System.out.println("박진수 컴맹");
+		System.out.println("박진수 뭐함?");
 
 		//실행시 1.로그인 2.회원가입
 		coupang.start();
