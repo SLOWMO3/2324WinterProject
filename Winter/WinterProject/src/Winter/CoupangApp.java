@@ -19,4 +19,6 @@ public class CoupangApp {
 	public void test() {
 		System.out.println("test");
 	}
+
+	// 내가 해볼게
 }
