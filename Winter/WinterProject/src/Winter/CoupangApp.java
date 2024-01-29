@@ -1,25 +1,24 @@
 package Winter.WinterProject.src.Winter;
 
+import java.io.ObjectInputStream.GetField;
 public class CoupangApp {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		Coupang coupang = new Coupang();
 
-		System.out.println("변경 사항 생성");
-		System.out.println("박진수 컴맹");
-		System.out.println("박진수 뭐함?");
+		coupang.addMember(new Member(1111, "철수"));
+		coupang.addMember(new Member(2222, "영희"));
+		coupang.addMember(new Member(3333, "훈이"));
+
+		coupang.addProduct(new Member(1111, "철수"),new Product("짱돌", 2000, 2));
+		coupang.addProduct(new Member(2222, "영희"),new Product("인형", 3000, 1));
+		coupang.addProduct(new Member(3333, "훈이"), new Product("친구", 1500, 1));
+		coupang.addProduct(new Member(3333, "훈이"), new Product("짱돌", 2500, 1));
 
 		//실행시 1.로그인 2.회원가입
-		coupang.start();
-		
 		//접속시 1.상품등록 2.상품삭제 3.개인정보확인 4. 구매 등등 ==> Coupang에 작성할것 로그인 성공시 메소드로!
+		coupang.start();
+
 	}
 
-	public void test() {
-		System.out.println("test");
-	}
-
-	// 내가 해볼게
-	// 난 안할래
 }
