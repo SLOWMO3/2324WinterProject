@@ -10,6 +10,7 @@ public class CoupangApp {
 		System.out.println("아오 박진수시치시발");
 		System.out.println("박진수 뭐함?");
 		System.out.println("ㄴㅁㅇㅁㅇㅇㄴ?");
+		System.out.println("ㄴㅁㅇㅁㅇㅇㄴ?");
 		//실행시 1.로그인 2.회원가입
 		coupang.start();
 		
