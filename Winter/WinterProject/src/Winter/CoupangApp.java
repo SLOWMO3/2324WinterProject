@@ -7,6 +7,7 @@ public class CoupangApp {
 		Coupang coupang = new Coupang();
 
 		System.out.println("변경 사항 생성");
+		System.out.println("박진수 컴맹");
 
 		//실행시 1.로그인 2.회원가입
 		coupang.start();
@@ -15,7 +16,7 @@ public class CoupangApp {
 	}
 
 	public void test() {
-		System.out.println('test');
+		System.out.println("test");
 	}
 // 느금마
 }
