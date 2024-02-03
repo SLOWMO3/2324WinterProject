@@ -5,15 +5,14 @@ public class Product {
 	private String s_name;	//판매자(seller name)
 	private int price;		//가격
 	private int quantity;	//수량
-	
+
 	public Product(String p_name, int price, int quantity) {
 		this.p_name = p_name;
 		this.price = price;
 		this.quantity = quantity;
 	}
-	
+
 	public Product(String p_name, int quantity) {
-		// TODO Auto-generated constructor stub
 		this.p_name = p_name;
 		this.quantity = quantity;
 	}
@@ -27,7 +26,7 @@ public class Product {
 	public void setPrice(int price) { this.price = price; }
 	public int getQuantity() { return quantity; }
 	public void setQuantity(int quantity) { this.quantity = quantity; }
-	
+
 	//equals, toString 재정의
 	@Override
 	public boolean equals(Object obj) {
@@ -39,6 +38,6 @@ public class Product {
 	@Override
 	public String toString() {
 		return "상품명:" + p_name + " 가격:" + price + " 판매자:" + s_name + " 수량:" + quantity;
-	}	
-	
+	}
+
 }
