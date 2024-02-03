@@ -8,6 +8,8 @@ public class Coupang {
 	private List<Product> pro_list = new ArrayList<>(); //전체 상품 리스트
 	Member nowMember; // 현재 회원이 누구인지 플래그
 
+	int logout_exit_flag = 0; //메뉴창에서 바로 종료 가능하게 만들려고
+
 	// get/set
 	public Member getNowMember() {
 		return nowMember;
@@ -20,9 +22,19 @@ public class Coupang {
 	//비교 : 배열안에 동일객체가 있는지 확인
 	Member findMember(Member mem) {
 		if(mem_list.contains(mem)) {
-			return mem;
+			for(int i = 0; i < mem_list.size(); i++){
+				if(mem.equals(mem_list.get(i))){
+					return mem_list.get(i);}
+			}
 		}
 		return null;
+	}
+
+	//배열 출력함수
+	void printProductList(List<Product> list){
+		for (int i = 0; i < list.size(); i++)
+			System.out.println(list.get(i) + " ");
+		System.out.println();
 	}
 
 	//회원가입(단순추가)
@@ -34,14 +46,23 @@ public class Coupang {
 	void addProduct(Member mem, Product pro) {
 		pro.set_s_name(mem.get_nickname()); //로그인된 닉네임 받아서 상품추가
 		if(pro_list.contains(pro)) { //판매자와 상품이름이 모두 같으면
-			for (int i = 0; i < pro_list.size(); i++) { //배열에서 해당상품 찾아서
+			for (int i = 0; i < pro_list.size(); i++) { //전체 상품 배열에서 수량을 증가시킴
 				if(pro_list.get(i).equals(pro)) {
-					pro_list.get(i).setQuantity(pro_list.get(i).getQuantity()+pro.getQuantity()); //원래 배열에 있던 상품의 수량을 증가시킴
+					pro_list.get(i).setQuantity(pro_list.get(i).getQuantity()+pro.getQuantity());
+					break;
+				}
+			}
+			for (int j = 0; j < mem.my_sale.size(); j++) { //개인 판매중 상품 배열에서 수량을 증가시킴
+				if(mem.my_sale.get(j).equals(pro)) {
+					mem.my_sale.get(j).setQuantity(mem.my_sale.get(j).getQuantity()+pro.getQuantity());
 					break;
 				}
 			}
 		}
-		else {pro_list.add(pro);} //그게 아니면 배열에 상품등록
+		else {
+			pro_list.add(pro); //전체 배열에 상품등록
+			mem.my_sale.add(pro); //개인 판매중 상품 배열에 상품등록
+		}
 
 	}
 	//회원 삭제
@@ -57,10 +78,12 @@ public class Coupang {
 				if(pro_list.get(i).equals(pro)) {
 					if(pro_list.get(i).getQuantity()- pro.getQuantity() == 0) {
 						pro_list.remove(i);
+						mem.my_sale.remove(pro); //개인 판매중 상품 배열에 상품삭제
 						System.out.println("제품이 삭제되었습니다.");
 						break;}
 					else if(pro_list.get(i).getQuantity()-pro.getQuantity() > 0) {
-						pro_list.get(i).setQuantity(pro_list.get(i).getQuantity()-pro.getQuantity()); //원래 배열에 있던 상품의 수량을 감소시킴
+						pro_list.get(i).setQuantity(pro_list.get(i).getQuantity()-pro.getQuantity()); //전체 상품 배열에서 수량을 감소시킴
+						mem.my_sale.get(i).setQuantity(mem.my_sale.get(i).getQuantity()-pro.getQuantity()); //개인 판매중 상품 배열에서 수량을 감소시킴
 						System.out.println("제품수량이 감소하였습니다.");
 						break;
 					}
@@ -75,6 +98,7 @@ public class Coupang {
 	//초기화면
 	public void start() {
 		while(true) {
+			if(logout_exit_flag == 1){System.out.println("앱을 종료합니다."); return;}
 			System.out.println("------------------------------------------------");
 			System.out.println("1.회원가입 2.로그인 3.종료"); // 두 가지 메뉴 출력
 			System.out.println("------------------------------------------------");
@@ -145,24 +169,31 @@ public class Coupang {
 	// 로그인 성공 시 창
 	private void showMenu() {
 		while(true) {
+			if(findMember(nowMember)==null){return;}
 			System.out.println("------------------------------------------------");
-			System.out.println("1.구매 2.판매 3.마이정보 4.쿠페이머니 충전 5.로그아웃"); // 메뉴 출력
+			System.out.println("1.전체 상품보기 2.구매 3.판매 4.마이정보 5.쿠페이머니 충전 6.로그아웃 7.종료"); // 메뉴 출력
 			System.out.println("------------------------------------------------");
 			int input = scan.nextInt();
 			switch(input) {
-				case 1: //구매
+				case 1: //전체 상품보기
+					printProductList(pro_list);
+					break;
+				case 2: //구매
 					buy();
 					break;
-				case 2: //판매
+				case 3: //판매
 					sell();
 					break;
-				case 3: //마이정보
+				case 4: //마이정보
 					myMenu();
 					break;
-				case 4: //쿠페이머니 충전
+				case 5: //쿠페이머니 충전
 					charge();
 					break;
-				case 5: //로그아웃
+				case 6: //로그아웃
+					return;
+				case 7: //종료
+					logout_exit_flag = 1;
 					return;
 
 				default:
@@ -176,22 +207,22 @@ public class Coupang {
 	private void myMenu() {
 		while(true) {
 			System.out.println("------------------------------------------------");
-			System.out.println("1.개인정보 2.판매중인 상품 3.구입 상품 4.회원탈퇴 5.이전메뉴"); // 메뉴 출력
+			System.out.println("1.개인정보 2.판매중 상품 3.구입 상품 4.회원탈퇴 5.이전메뉴"); // 메뉴 출력
 			System.out.println("------------------------------------------------");
 			int input = scan.nextInt();
 			switch(input) {
 				case 1: //개인정보
 					System.out.println(nowMember.toString());
 					break;
-				case 2:
-					System.out.println(nowMember.my_sale.toArray());; //판매중인 상품 -> 미완
+				case 2: //판매중인 상품
+					printProductList(nowMember.my_sale);
 					break;
-				case 3: //구입 상품
-					System.out.println(nowMember.my_purchase.toArray()); //구매한 상품 -> 미완
+				case 3: //구입한 상품
+					printProductList(nowMember.my_purchased);
 					break;
 				case 4: //회원탈퇴
 					removeMember(nowMember); //->미완 ,탈퇴후 로그인 창으로 이동해야됨
-					break;
+					return;
 				case 5: //이전 메뉴
 					return;
 				default:
