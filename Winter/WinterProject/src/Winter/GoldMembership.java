@@ -27,6 +27,7 @@ public class GoldMembership extends Membership {
             case "웨이브": {
                 System.out.println("웨이브 서비스를 제공받습니다.");
             }
+
         }
     }
 }
