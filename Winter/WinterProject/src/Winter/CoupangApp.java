@@ -1,6 +1,5 @@
 package Winter.WinterProject.src.Winter;
 
-import java.io.ObjectInputStream.GetField;
 public class CoupangApp {
 
 	public static void main(String[] args) {

@@ -17,8 +17,8 @@ public class Member {
 	private int total_SA; 		//총판매액(sales amount)
 
 	//구매, 판매 상품 리스트
-	List<Product> my_purchase = new ArrayList<>(); //구매
-	List<Product> my_sale = new ArrayList<>(); // 판매
+	List<Product> my_purchased = new ArrayList<>(); //구매한 상품
+	List<Product> my_sale = new ArrayList<>(); // 판매중 상품
 
 	//get/set 메소드
 	public int get_id() { return id; }
@@ -45,9 +45,19 @@ public class Member {
 		return false;
 	}
 
+	String rank(){
+		if(0 <= total_PA + total_SA && total_PA + total_SA < 5000)
+			return "브론즈";
+		else if (5000 <= total_PA + total_SA && total_PA + total_SA < 10000)
+			return "실버";
+		else if (10000 <= total_PA + total_SA && total_PA + total_SA < 20000)
+			return "골드";
+		else return "다이아";
+	}
+
 	@Override //미완
 	public String toString() {
-		return "닉네임:" + nickname + " 등급:" + total_PA + " 쿠페이머니:" + coupaymoney;
+		return "닉네임:" + nickname + " 등급:" + rank() + " 쿠페이머니:" + coupaymoney;
 	}
 
 }
