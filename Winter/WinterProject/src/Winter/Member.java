@@ -19,6 +19,7 @@ public class Member {
 	//구매, 판매 상품 리스트
 	List<Product> my_purchase = new ArrayList<>(); //구매
 	List<Product> my_sale = new ArrayList<>(); // 판매
+	List<Product> my_cart = new ArrayList<>(); //구매
 
 	//get/set 메소드
 	public int get_id() { return id; }

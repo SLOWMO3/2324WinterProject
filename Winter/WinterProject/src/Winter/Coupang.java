@@ -272,7 +272,7 @@ public class Coupang {
 				case 1: //물품검색
 					this.productSearch();
 					break;
-				case 2: //물품구매
+				case 2: //물품구매(장바구니에 추가)
 					this.productPurchase();
 					break;
 				case 3: //이전메뉴
@@ -284,67 +284,69 @@ public class Coupang {
 		}
 	}
 
-	//상품검색 -> 수정 -> 오류!
+	//상품검색 ==> 검색 대상 리스트가 자신이 등록한 물품도 검색됨
 	private void productSearch() {
 		int flag = 0;
 		System.out.println("찾는 상품을 검색해주세요: ");
 		String s_name = scan.next();
 
 		for (int i = 0; i < pro_list.size(); i++) { //배열에서 검색한 상품이 있는지 확인
-			if(s_name.equals(pro_list.get(i).get_p_name())) { //->여기 안됨
+			if(s_name.equals(pro_list.get(i).get_p_name())) {
 				System.out.println(pro_list.get(i).toString());
-				System.out.println("");
+				System.out.println();
 				flag++;
-				continue;
 			}
 		}
-		if(flag==0) {System.out.println("해당 상품이 존재하지 않습니다.");}
+		if(flag==0){
+			System.out.println("찾는 상품이 존재하지 않습니다.");
+		}
 
 	}
 
-	private void productPurchase() { //아직 안살펴봄
+	private void productPurchase() {
 		while(true) {
-			System.out.println("구매하실 상품을 검색해주세요: ");
+			int flag = 0;
+			List<Product> ex_list = new ArrayList<>();
+			System.out.println("구매하실 상품을 검색해주세요: (종료: r입력)");
 			String s_name = scan.next();
-			for (int i = 0; i < pro_list.size(); i++) { //배열에서 검색한 상품이 있는지 확인
-				if(pro_list.get(i).get_p_name().equals(s_name)) {
-					System.out.println("상품을 찾았습니다.");
-					System.out.println("");
-					System.out.println("몇개를 구매하시겠습니까? 구매가능 최대개수는"+pro_list.get(i).getQuantity()+"입니다.");
-					int pc_count = scan.nextInt();
-					if(pro_list.get(i).getQuantity()>= pc_count) {
-						System.out.println("구매가능한 수량입니다. 총 구매액은 " + pro_list.get(i).getPrice()*pc_count +"원입니다."+" 구매하시겠습니까? Y/N으로 답해주세요:");
-						String choice = scan.next();
-						switch(choice) {
-							case "Y":
-								if(getNowMember().getCoupaymoney() >= pro_list.get(i).getPrice()*pc_count) {
-									getNowMember().setCoupaymoney(getNowMember().getCoupaymoney()-pro_list.get(i).getPrice()*pc_count);
-									System.out.println("구매완료했습니다!");
-									break;
-								}
-								else
-									System.out.println("보유하고있는 쿠페이머니보다 구매금액이 더 커서 구매할 수 없습니다. 먼저 쿠페이머니를 충전해주세요!");
-								break;
-							case "N" :
-								System.out.println("구매가 취소되었습니다.");
-								break;
-
-							default:
-								System.out.println("잘못된 입력입니다.");
-								System.out.println();
-								break;
-						}
-
-					}
-				}
-
-				else
-					System.out.println("찾으시는 상품이 없습니다. 다시 검색해주세요.");
+			if(s_name.equals("r")){
 				break;
 			}
+			for (int i = 0; i < pro_list.size(); i++) { //배열에서 검색한 상품이 있는지 확인
+				if(s_name.equals(pro_list.get(i).get_p_name())) {
+					System.out.print( flag+1 + ".");
+					System.out.println(pro_list.get(i).toString());
+					System.out.println();
+					ex_list.add(pro_list.get(i));
+					flag++;
+				}
+			}
+			if(flag==0) {
+				System.out.println("찾는 상품이 존재하지 않습니다.");
+				continue;
+			}
+			while(true) {
+				System.out.println("구매하실 상품의 번호를 입력하세요.(종료:0)");
+				int num1 = scan.nextInt();
+				if(num1==0){break;}
+				if (1 <= num1 && num1 < ex_list.size()) {
+					System.out.println("구매하실 수량을 입력하세요.");
+					int num2 = scan.nextInt();
+					Product pro = ex_list.get(num1 - 1);
+					if (0 < num2 && num2 <= pro.getQuantity()) {
+						Product cart = new Product(pro.get_p_name(), pro.getPrice(), num2);
+						nowMember.my_cart.add(cart);
+						System.out.println("추가되었습니다.");
+					} else {
+						System.out.println("잘못된 수량입니다.");
+					}
+				} else {
+					System.out.println("없는 번호입니다.");
+				}
+			}
 
-			break;
 		}
 	}
+
 
 }
