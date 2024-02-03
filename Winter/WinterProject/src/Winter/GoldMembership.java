@@ -9,7 +9,7 @@ public class GoldMembership extends Membership {
 
     @Override
     public void selectOttservice() {
-        System.out.println("골드 멤버쉽으로 쿠팡플레이, 티빙, 넷플릭스,왓챠,웨이브중 하나를 선택해 OTT서비스를 제공받을 수 있습니다. 제공받을 서비스를 선택해주세요.");
+        System.out.println("골드 멤버쉽혜택으로 쿠팡플레이, 티빙, 넷플릭스,왓챠,웨이브중 하나를 선택해 OTT서비스를 제공받을 수 있습니다. 제공받을 서비스를 선택해주세요.");
         String choiceOtt = scan.toString();
         switch (choiceOtt) {
             case "쿠팡플레이": {
