@@ -8,7 +8,7 @@ public class BronzeMemberShip extends Membership{
 
     @Override
     public void selectOttservice() {
-       System.out.println("브론즈 멤버쉽은 Ott서비스가 제공되지 않습니다.");
+       System.out.println("브론즈 멤버쉽은 Ott서비스가 제공되지 않습니다ㅇㅇㅇㅇㅇㅇㅇㅇㅇ.");
     }
 
 
