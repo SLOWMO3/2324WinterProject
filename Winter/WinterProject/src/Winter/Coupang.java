@@ -296,22 +296,65 @@ public class Coupang {
 	private void buy() {
 		while(true) {
 			System.out.println("------------------------------------------------");
-			System.out.println("1.물품검색 2.물품구매 3.이전메뉴"); // 메뉴 출력
+			System.out.println("1.물품검색 2.물품구매 3.장바구니(결제) 4.이전메뉴"); // 메뉴 출력
 			System.out.println("------------------------------------------------");
 			int input = scan.nextInt();
 			switch(input) {
 				case 1: //물품검색
-					this.productSearch();
+					this.printProductList(pro_list);;
 					break;
 				case 2: //물품구매(장바구니에 추가)
 					this.productPurchase();
 					break;
-				case 3: //이전메뉴
+				case 3: //장바구니 확인 및 결제
+					this.showCart();
+					break;
+				case 4: //이전메뉴
 					return;
 				default:
 					System.out.println("잘못된 입력입니다.");
 					System.out.println();
 			}
+		}
+	}
+
+	private void showCart() {
+		int result=0;
+        for (Product product : nowMember.my_cart) {
+			result += product.getPrice()*product.getQuantity();
+			System.out.println();
+			System.out.println("--------------------------------------");
+            System.out.println(product);
+        }
+		while(true){
+			System.out.println("--------------------------------------");
+			System.out.println("총 결제금액 : " + result + "\t잔액 : " + nowMember.getCoupaymoney());
+			System.out.println("1.결제 2.이전");
+			System.out.println("--------------------------------------");
+			int in = scan.nextInt();
+			switch(in) {
+				case 1:
+					this.doPayment(result);
+					break;
+				case 2:
+					return;
+				default:
+					System.out.println("잘못된 입력입니다.");
+					System.out.println();
+			}
+		}
+	}
+
+	private void doPayment(int payAmount) {
+		int result = nowMember.getCoupaymoney()-payAmount;
+		if(result<0){
+			System.out.println("잔액이 부족하여 충전이 필요합니다.");
+		}else {
+			nowMember.setCoupaymoney(nowMember.getCoupaymoney() - payAmount);
+			System.out.println("결제가 완료되었습니다.");
+			System.out.println("잔액 : " + nowMember.getCoupaymoney());
+			System.out.println("--------------------------------------");
+			nowMember.my_cart.clear();
 		}
 	}
 
@@ -364,12 +407,27 @@ public class Coupang {
 					System.out.println("구매하실 수량을 입력하세요.");
 					int num2 = scan.nextInt();
 					Product pro = ex_list.get(num1 - 1);
-					if (0 < num2 && num2 <= pro.getQuantity()) {
-						Product cart = new Product(pro.get_p_name(), pro.getPrice(), num2);
-						nowMember.my_cart.add(cart);
-						System.out.println("추가되었습니다.");
-					} else {
-						System.out.println("잘못된 수량입니다.");
+					int extra = 0;
+					if(nowMember.my_cart.contains(pro)){
+						int i = nowMember.my_cart.indexOf(pro);
+						extra = pro.getQuantity() - nowMember.my_cart.get(i).getQuantity();
+						if (0 < num2 && num2 <= extra) {
+							int j = nowMember.my_cart.get(i).getQuantity();
+							nowMember.my_cart.get(i).setQuantity(j+num2);
+							System.out.println("추가되었습니다.");
+						} else {
+							System.out.println("잘못된 수량입니다.");
+						}
+					}else {
+						extra = pro.getQuantity();
+						if (0 < num2 && num2 <= extra) {
+							Product cart = new Product(pro.get_p_name(), pro.getPrice(), num2);
+							cart.set_s_name(pro.get_s_name());
+							nowMember.my_cart.add(cart);
+							System.out.println("추가되었습니다.");
+						} else {
+							System.out.println("잘못된 수량입니다.");
+						}
 					}
 				} else {
 					System.out.println("없는 번호입니다.");
