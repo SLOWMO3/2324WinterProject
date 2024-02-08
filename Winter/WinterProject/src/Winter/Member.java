@@ -8,29 +8,35 @@ public class Member {
 	private int coupaymoney = 0;    //보유하고있는 쿠페이머니 잔액
 	private String membershipGrade;
 	private Membership membership;
-
-	//총 구매액, 판매액으로 등급+혜택 적용 -> if문 사용??
 	private int total_PA = 0; 		//총구매액(purchase amount)
 	private int total_SA = 0; 		//총판매액(sales amount)
 
+	//총 구매액, 판매액으로 등급+혜택 적용 -> if문 사용??
+
+
 	//구매, 판매 상품 리스트
-	List<Product> my_purchased = new ArrayList<>(); //구매한 상품
-	List<Product> my_sale = new ArrayList<>(); // 판매중 상품
+   List<Product> my_purchased = new ArrayList<>(); //구매한 상품
+	 List<Product> my_sale = new ArrayList<>(); // 판매중 상품
 	List<Product> my_cart = new ArrayList<>();
 
-	public Member(){
-
-
+	public Member(int id, String nickname) {
+        this.id = id;
+		this.nickname = nickname;
 	}
 
-	public Member(int id, String nickname) {
-		this.id = id;
-		this.nickname = nickname;
+	public Member() {
+
 	}
 
 	//get/set 메소드
 	public int get_id() { return id; }
 	public void set_id(int id) { this.id = id; }
+	public void setMembership(Membership membership) {
+		this.membership = membership;
+	}
+	public Membership getMembership() {
+		return membership;
+	}
 	public String get_nickname() { return nickname; }
 	public void set_nickname(String nickname) { this.nickname = nickname; }
 	public String get_membershipGrade() { return membershipGrade; }
@@ -55,20 +61,9 @@ public class Member {
 			return true;
 		return false;
 	}
-
-	String rank(){
-		if(0 <= total_PA + total_SA && total_PA + total_SA < 5000)
-			return "브론즈";
-		else if (5000 <= total_PA + total_SA && total_PA + total_SA < 10000)
-			return "실버";
-		else if (10000 <= total_PA + total_SA && total_PA + total_SA < 20000)
-			return "골드";
-		else return "다이아";
-	}
-
 	@Override //미완
 	public String toString() {
-		return "닉네임:" + nickname + " 등급:" + rank() + " 쿠페이머니:" + coupaymoney;
+		return "닉네임:" + nickname + " 멤버쉽:" + membershipGrade + " 쿠페이머니:" + coupaymoney;
 	}
 
 }
