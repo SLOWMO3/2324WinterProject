@@ -1,7 +1,8 @@
 package Winter.WinterProject.src.Winter;
 
-import javax.swing.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Coupang {
     Scanner scan = new Scanner(System.in); // 스캐너 : scan
@@ -429,7 +430,7 @@ public class Coupang {
                 System.out.println("구매하실 상품의 번호를 입력하세요.(종료:0)");
                 int num1 = scan.nextInt();
                 if(num1==0){break;}
-                if (1 <= num1 && num1 < ex_list.size()) {
+                if (1 <= num1 && num1 <= ex_list.size()) {
                     System.out.println("구매하실 수량을 입력하세요.");
                     int num2 = scan.nextInt();
                     Product pro = ex_list.get(num1 - 1);
