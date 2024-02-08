@@ -2,67 +2,55 @@ package Winter.WinterProject.src.Winter;
 
 import java.util.Scanner;
 
-public class Membership extends Member {
+public class Membership {
     Scanner scan = new Scanner(System.in);
+    protected Member member;
 
-    private double membershipDiscountP;
-
-
-    public Membership(int id, String nickname, double membershipDiscountP) {
-        super(id, nickname);
-        this.membershipDiscountP = membershipDiscountP;
-
+    public Membership(Member member) {
+        this.member = member;
     }
 
-    public void setMembershipDiscountP(double membershipDiscountP) {
-        this.membershipDiscountP = membershipDiscountP;
-    }
+   public String convenienceStoreCoupon() {
+       System.out.println("멤버쉽에 가입되어 있지않아 쿠폰을 받을 수 없습니다.");
+       return null;
+   }
 
-    public double getMembershipDiscountP() {
-        return membershipDiscountP;
+    public double DiscountP() {
+        return 0;
     }
 
     public void selectOttservice() {
+        System.out.println("멤버쉽에 가입되어있지않아 Ott서비스를 제공받을수 없음");
     }
 
-    public void selecsdtOttservice() {
-    }
-    public void rewardPoints(){
-
+    public void rewardPoints(int chargemoney){
+        member.setCoupaymoney(member.getCoupaymoney() + chargemoney);
     }
 
-
-    public void displayMemberShip() {
-        System.out.println("닉네임: " + get_nickname());
-        System.out.println("멤버쉽등급은: " + get_membershipGrade());
-    }
 
     public void updateMembershipGrade() {
-        int combinedAmount = super.getTotal_PA()+getTotal_SA();
+        int combinedAmount = member.getTotal_PA()+member.getTotal_SA();
 
 
         if (combinedAmount >= 150000) {
-            set_membershipGrade("골드");
+            member.set_membershipGrade("Gold");
             // Add Gold membership benefit
             // ...
         } else if (combinedAmount >= 100000) {
-            set_membershipGrade("실버");
+            member.set_membershipGrade("Silver");
             // Add Silver membership benefits
             // ...
         } else if (combinedAmount >= 50000) {
-            set_membershipGrade("브론즈");
+            member.set_membershipGrade("Bronze");
             // Add Bronze membership benefits
             // ...
         }
-        else
-            set_membershipGrade("계정이 멤버쉽에 가입되어 있지 않습니다.");
+        else member.set_membershipGrade("No MemberShip");
+
     }
 
-
+public void ShowMemberShipBenefit() {
+        System.out.println("멤버쉽에 가입되어있지 않아 혜택이없습니다.");
 }
 
-
-
-
-
-
+}
