@@ -6,8 +6,8 @@ import java.util.Scanner;
 
 public class Coupang {
     Scanner scan = new Scanner(System.in); // 스캐너 : scan
-    private List<Member> mem_list = new ArrayList<>(); //전체 회원 리스트
-    private List<Product> pro_list = new ArrayList<>(); //전체 상품 리스트
+    List<Member> mem_list = new ArrayList<>(); //전체 회원 리스트
+    List<Product> pro_list = new ArrayList<>(); //전체 상품 리스트
     Member nowMember = new Member(); // 현재 회원이 누구인지 플래그
 
 
@@ -51,10 +51,14 @@ public class Coupang {
     }
 
     //배열 출력함수
-    void printProductList(List<Product> list){
-        for (int i = 0; i < list.size(); i++)
-            System.out.println(list.get(i) + " ");
-        System.out.println();
+    void printProductList(List<Product> list) {
+        if (list.isEmpty()) {
+            System.out.println("등록된 상품이 없습니다.");
+        } else {
+            for (Product product : list) {
+                System.out.println(product.toString());
+            }
+        }
     }
 
     //회원가입(단순추가)
@@ -96,23 +100,30 @@ public class Coupang {
         if(pro_list.contains(pro)) { //판매자와 상품이름이 모두 같으면
             for (int i = 0; i < pro_list.size(); i++) { //배열에서 해당상품 찾아서
                 if(pro_list.get(i).equals(pro)) {
-                    if(pro_list.get(i).getQuantity()- pro.getQuantity() == 0) {
+                    if (pro_list.get(i).getQuantity() - pro.getQuantity() == 0) {
                         pro_list.remove(i);
                         mem.my_sale.remove(pro); //개인 판매중 상품 배열에 상품삭제
                         System.out.println("제품이 삭제되었습니다.");
-                        break;}
-                    else if(pro_list.get(i).getQuantity()-pro.getQuantity() > 0) {
-                        pro_list.get(i).setQuantity(pro_list.get(i).getQuantity()-pro.getQuantity()); //전체 상품 배열에서 수량을 감소시킴
-                        mem.my_sale.get(i).setQuantity(mem.my_sale.get(i).getQuantity()-pro.getQuantity()); //개인 판매중 상품 배열에서 수량을 감소시킴
+                        break;
+                    } else if (pro_list.get(i).getQuantity() - pro.getQuantity() > 0) {
+                        pro_list.get(i).setQuantity(pro_list.get(i).getQuantity() - pro.getQuantity()); //전체 상품 배열에서 수량을 감소시킴
                         System.out.println("제품수량이 감소하였습니다.");
                         break;
+                    } else {
+                        System.out.println("삭제하고자 하는 상품의 수량이 기존 수량보다 많습니다!");
+                        break;
                     }
-                    else {System.out.println("삭제하고자 하는 상품의 수량이 기존 수량보다 많습니다!");
-                        break;}
                 }
             }
-        }
-        else System.out.println("등록되지 않은 상품입니다.");
+            for (int j = 0; j < mem.my_sale.size(); j++) {  //개인 판매중 상품 배열에서 수량을 감소시킴
+                if(mem.my_sale.get(j).equals(pro)){
+                    if(mem.my_sale.get(j).getQuantity() - pro.getQuantity() > 0){
+                        mem.my_sale.get(j).setQuantity(mem.my_sale.get(j).getQuantity() - pro.getQuantity());
+                        break;
+                    }
+                }
+            }
+        }else {System.out.println("등록되지 않은 상품입니다.");}
     }
 
     //초기화면
@@ -177,7 +188,7 @@ public class Coupang {
                 System.out.println();
                 continue;
             }else {
-                nowMember = mb;
+                nowMember = flag;
                 System.out.println("로그인에 성공하였습니다.");
                 System.out.println();
                 break;
@@ -191,7 +202,7 @@ public class Coupang {
         while(true) {
             if(findMember(nowMember)==null){return;}
             System.out.println("------------------------------------------------");
-            System.out.println("1.전체 상품보기 2.구매 3.판매 4.마이정보 5.쿠페이머니 충전 6.로그아웃 7.종료"); // 메뉴 출력
+            System.out.println("1.전체 상품보기 2.구매 3.판매 4.마이정보 5.쿠페이머니충전 6.로그아웃 7.종료"); // 메뉴 출력
             System.out.println("------------------------------------------------");
             int input = scan.nextInt();
             switch(input) {
@@ -227,7 +238,7 @@ public class Coupang {
     private void myMenu() {
         while(true) {
             System.out.println("------------------------------------------------");
-            System.out.println("1.개인정보 2.판매중 상품 3.구입 상품 4.회원탈퇴 5.이전메뉴 6.멤버쉽혜택확인"); // 메뉴 출력
+            System.out.println("1.개인정보 2.판매중상품 3.구입상품 4.회원탈퇴 5.멤버쉽혜택확인 6.이전메뉴"); // 메뉴 출력
             System.out.println("------------------------------------------------");
             int input = scan.nextInt();
             switch(input) {
@@ -241,7 +252,7 @@ public class Coupang {
                     printProductList(nowMember.my_purchased);
                     break;
                 case 4: //회원탈퇴
-                    removeMember(nowMember); //->미완 ,탈퇴후 로그인 창으로 이동해야됨
+                    removeMember(nowMember);
                     return;
                 case 5: //혜택 확인
                     checkNowMember(nowMember);
@@ -381,11 +392,37 @@ public class Coupang {
             System.out.println("결제가 완료되었습니다.");
             System.out.println("잔액 : " + nowMember.getCoupaymoney());
             System.out.println("--------------------------------------");
+
+            nowMember.my_purchased.addAll(nowMember.my_cart); //구매내역에 추가(같은상품이여도 따로 구매하면 따로 기록됨)
+            for(int i = 0; i<nowMember.my_cart.size(); i++){ //카트에 담은 상품 하나씩
+                for(int j=0; j<mem_list.size(); j++) { //해당 상품의 판매자를 찾아서
+                    if (nowMember.my_cart.get(i).get_s_name().equals(mem_list.get(j).get_nickname())){
+                        mem_list.get(j).setTotal_SA(mem_list.get(j).getTotal_SA() + (nowMember.my_cart.get(i).getPrice()*nowMember.my_cart.get(i).getQuantity())); //해당상품 판매자의 총판매가격 증가
+                        for(int k = 0; k<mem_list.get(j).my_sale.size(); k++){  //판매자의 판매리스트에서 삭제 또는 감소
+                            if(mem_list.get(j).my_sale.get(k).getQuantity()-nowMember.my_cart.get(i).getQuantity() == 0) { //수량이 0이되면 삭제
+                                mem_list.get(j).my_sale.remove(nowMember.my_cart.get(i));
+                                break;
+                            }else {mem_list.get(j).my_sale.get(k).setQuantity(mem_list.get(j).my_sale.get(k).getQuantity()-nowMember.my_cart.get(i).getQuantity());
+                                break;} //수량이 0이상(0이하는 카트에 안담기므로 제외)
+                        }
+                        break;
+                    }
+                }
+                for(int l = 0; l<pro_list.size(); l++){ //전체 상품 리스트
+                    if(nowMember.my_cart.get(i).get_s_name().equals(pro_list.get(l).get_s_name())){
+                        if(pro_list.get(l).getQuantity()-nowMember.my_cart.get(i).getQuantity() == 0){
+                            pro_list.remove(nowMember.my_cart.get(i));
+                            break;
+                        }else {pro_list.get(l).setQuantity(pro_list.get(l).getQuantity()-nowMember.my_cart.get(i).getQuantity());
+                            break;}
+                    }
+                }
+            }
+
             nowMember.my_cart.clear();
         }
     }
 
-    //상품검색 ==> 검색 대상 리스트가 자신이 등록한 물품도 검색됨
     private void productSearch() {
         int flag = 0;
         System.out.println("찾는 상품을 검색해주세요: ");
@@ -401,7 +438,6 @@ public class Coupang {
         if(flag==0){
             System.out.println("찾는 상품이 존재하지 않습니다.");
         }
-
     }
 
     private void productPurchase() {
@@ -460,9 +496,6 @@ public class Coupang {
                     System.out.println("없는 번호입니다.");
                 }
             }
-
         }
     }
-
-
 }

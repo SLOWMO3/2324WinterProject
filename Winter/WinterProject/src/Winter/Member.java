@@ -8,15 +8,21 @@ public class Member {
 	private int coupaymoney = 0;    //보유하고있는 쿠페이머니 잔액
 	private String membershipGrade;
 	private Membership membership;
-	private int total_PA = 0; 		//총구매액(purchase amount)
-	private int total_SA = 0; 		//총판매액(sales amount)
+	private int total_PA(){ //총구매액(purchase amount)
+		int tpa = 0;
+		for(int i = 0; i<my_purchased.size(); i++){
+			tpa += my_purchased.get(i).getQuantity() * my_purchased.get(i).getPrice();
+		}
+		return tpa;
+	}
+	private int total_SA = 0; 	//총판매액(sales amount)
 
 	//총 구매액, 판매액으로 등급+혜택 적용 -> if문 사용??
 
 
 	//구매, 판매 상품 리스트
-   List<Product> my_purchased = new ArrayList<>(); //구매한 상품
-	 List<Product> my_sale = new ArrayList<>(); // 판매중 상품
+    List<Product> my_purchased = new ArrayList<>(); //구매한 상품
+	List<Product> my_sale = new ArrayList<>(); // 판매중 상품
 	List<Product> my_cart = new ArrayList<>();
 
 	public Member(int id, String nickname) {
@@ -41,8 +47,7 @@ public class Member {
 	public void set_nickname(String nickname) { this.nickname = nickname; }
 	public String get_membershipGrade() { return membershipGrade; }
 	public void set_membershipGrade(String membershipGrade) { this.membershipGrade = membershipGrade; }
-	public int getTotal_PA() { return total_PA; }
-	public void setTotal_PA(int total_PA) { this.total_PA = total_PA; }
+	public int getTotal_PA() { return total_PA(); }
 	public int getTotal_SA() { return total_SA; }
 	public void setTotal_SA(int total_SA) { this.total_SA = total_SA; }
 
