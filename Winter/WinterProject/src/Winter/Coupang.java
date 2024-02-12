@@ -209,34 +209,30 @@ public class Coupang {
         while(true) {
             if(findMember(nowMember)==null){return;}
             System.out.println("------------------------------------------------");
-            System.out.println("1.전체 상품보기 2.구매 3.판매 4.마이정보 5.쿠페이머니충전 6.선물함 7.후기 8.로그아웃 9.종료"); // 메뉴 출력
+            System.out.println("1.구매 2.판매 3.마이정보 4.쿠페이머니충전 5.선물함 6.후기 7.로그아웃 8.종료"); // 메뉴 출력
             System.out.println("------------------------------------------------");
             int input = scan.nextInt();
             switch(input) {
-                case 1: //전체 상품보기
-                    printProductList(pro_list);
-                    break;
-                case 2: //구매
+                case 1: //구매
                     buy();
                     break;
-                case 3: //판매
+                case 2: //판매
                     sell();
                     break;
-                case 4: //마이정보
+                case 3: //마이정보
                     myMenu();
                     break;
-                case 5: //쿠페이머니 충전
+                case 4: //쿠페이머니 충전
                     charge();
                     break;
-                case 6: // 선물확인
+                case 5: // 선물확인
                     gift();
-                case 7: //후기
+                case 6: //후기
                     review();
-
                     break;
-                case 8: //로그아웃
+                case 7: //로그아웃
                     return;
-                case 9: //종료
+                case 8: //종료
                     logout_exit_flag = 1;
                     return;
                 default:
@@ -399,10 +395,10 @@ public class Coupang {
 
     //물품삭제
     private void productRemove() {
-        System.out.println("삭제할 상품의 제품명과 삭제할 수량을 입력해주세요 :");
-        System.out.println("제품명: ");
+        System.out.println("삭제할 상품의 제품명과 삭제할 수량을 입력해주세요.");
+        System.out.print("제품명: ");
         String removename = scan.next();
-        System.out.println("수량: ");
+        System.out.print("수량: ");
         int removeQy = scan.nextInt();
         Product removepd = new Product(removename,removeQy);
 
@@ -560,22 +556,6 @@ public class Coupang {
             }
         }
     }
-    private void productSearch() {
-        int flag = 0;
-        System.out.println("찾는 상품을 검색해주세요: ");
-        String s_name = scan.next();
-
-        for (int i = 0; i < pro_list.size(); i++) { //배열에서 검색한 상품이 있는지 확인
-            if(s_name.equals(pro_list.get(i).get_p_name())) {
-                System.out.println(pro_list.get(i).toString());
-                System.out.println();
-                flag++;
-            }
-        }
-        if(flag==0){
-            System.out.println("찾는 상품이 존재하지 않습니다.");
-        }
-    }
 
     private void productPurchase() {
         while(true) {
@@ -680,7 +660,7 @@ public class Coupang {
         int flag = 0;
         for (int i = 0; i < nowMember.my_purchased.size(); i++) { //배열에서 검색한 상품이 있는지 확인
             System.out.print( flag+1 + ".");
-            System.out.println(pro_list.get(i).toString());
+            System.out.println(nowMember.my_purchased.get(i).toString());
             System.out.println();
             flag++;
         }
@@ -692,8 +672,8 @@ public class Coupang {
             if(0<num && num< nowMember.my_purchased.size()) {
                 System.out.println("후기 내용을 작성해주세요.");
                 String review_contents = scan.next();
-                nowMember.my_purchased.get(num).setReview(review_contents);
-                review_list.add(nowMember.my_purchased.get(num));
+                nowMember.my_purchased.get(num-1).setReview(review_contents);
+                review_list.add(nowMember.my_purchased.get(num-1));
             }else {System.out.println("잘못된 입력입니다.");}
         }
     }
