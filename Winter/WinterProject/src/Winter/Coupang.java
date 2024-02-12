@@ -233,7 +233,7 @@ public class Coupang {
         }
     }
 
-    //마이정보 -> 미완
+    //마이정보
     private void myMenu() {
         while(true) {
             System.out.println("------------------------------------------------");
