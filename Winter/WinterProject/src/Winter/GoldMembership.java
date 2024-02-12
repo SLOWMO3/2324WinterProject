@@ -67,15 +67,15 @@ public class GoldMembership extends Membership {
                     break;
                 }
                 case "GS25": {
-                    System.out.println("GS25쿠폰을발급받습니다.");
+                    System.out.println("GS25쿠폰을발급받습니다.2024GS25Gold");
                     break;
                 }
                 case "이마트24": {
-                    System.out.println("이마트24 쿠폰을발급받습니다.");
+                    System.out.println("이마트24 쿠폰을발급받습니다.2024이마트24Gold");
                     break;
                 }
                 case "세븐일레븐": {
-                    System.out.println("세븐일레븐 쿠폰을발급받습니다.");
+                    System.out.println("세븐일레븐 쿠폰을발급받습니다.2024세븐일레븐Gold");
                     break;
                 }
 
