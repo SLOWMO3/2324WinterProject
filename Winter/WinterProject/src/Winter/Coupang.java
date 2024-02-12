@@ -1,6 +1,7 @@
 package Winter.WinterProject.src.Winter;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -23,21 +24,25 @@ public class Coupang {
     }
 
     public void checkNowMember(Member nowMember) {
-        if (nowMember != null) {
-            switch (nowMember.get_membershipGrade()) {
-                case "Bronze":
-                    nowMember.setMembership(new BronzeMemberShip(nowMember));
-                    break;
-                case "Silver":
-                    nowMember.setMembership(new SilverMembership(nowMember));
-                    break;
-                case "Gold":
-                    nowMember.setMembership(new GoldMembership(nowMember));
-                    break;
-                default:
-                    nowMember.setMembership(new Membership(nowMember));
+        if(nowMember != null ) {
+            nowMember.updateMembershipGrade(nowMember);
+            if (nowMember.get_membershipGrade() != null) {
+                switch (nowMember.get_membershipGrade()) {
+                    case "Bronze":
+                        nowMember.setMembership(new BronzeMemberShip(nowMember));
+                        break;
+                    case "Silver":
+                        nowMember.setMembership(new SilverMembership(nowMember));
+                        break;
+                    case "Gold":
+                        nowMember.setMembership(new GoldMembership(nowMember));
+                        break;
+                    default:
+                        nowMember.setMembership(new Membership(nowMember));
+                }
             }
         }
+        else System.out.println("잘못된접근");
     }
     //비교 : 배열안에 동일객체가 있는지 확인
     Member findMember(Member mem) {
@@ -238,11 +243,12 @@ public class Coupang {
     private void myMenu() {
         while(true) {
             System.out.println("------------------------------------------------");
-            System.out.println("1.개인정보 2.판매중상품 3.구입상품 4.회원탈퇴 5.멤버쉽혜택확인 6.이전메뉴"); // 메뉴 출력
+            System.out.println("1.개인정보 2.판매중상품 3.구입상품 4.반품 5.회원탈퇴 6.멤버쉽혜택확인 7.이전메뉴"); // 메뉴 출력
             System.out.println("------------------------------------------------");
             int input = scan.nextInt();
             switch(input) {
                 case 1: //개인정보
+                    nowMember.updateMembershipGrade(nowMember);
                     System.out.println(nowMember.toString());
                     break;
                 case 2: //판매중인 상품
@@ -251,14 +257,22 @@ public class Coupang {
                 case 3: //구입한 상품
                     printProductList(nowMember.my_purchased);
                     break;
-                case 4: //회원탈퇴
+                case 4: returnItem(nowMember);
+                    break;
+                case 5: //회원탈퇴
                     removeMember(nowMember);
                     return;
-                case 5: //혜택 확인
+                case 6: //혜택 확인
                     checkNowMember(nowMember);
-                    nowMember.getMembership().ShowMemberShipBenefit();
+                    Membership membership = nowMember.getMembership();
+                    if (membership != null) {
+                        membership.ShowMemberShipBenefit();
+                    } else {
+                        System.out.println("Membership is null.");
+                        // Handle the case where membership is null
+                    }
                     return;
-                case 6: //이전 메뉴
+                case 7: //이전 메뉴
                     return;
                 default:
                     System.out.println("잘못된 입력입니다.");
@@ -267,18 +281,67 @@ public class Coupang {
         }
     }
 
-    private void charge() {
-        checkNowMember(nowMember);
-        System.out.println("현재 보유 쿠페이머니: " + nowMember.getCoupaymoney());
-        System.out.print("충전금엑: ");
-        int chargeMoney = scan.nextInt();
-        Membership membership = nowMember.getMembership();
-        // Accumulate reward points based on membership level
-        nowMember.getMembership().rewardPoints(chargeMoney);
-        System.out.println("충전완료.");
-        System.out.println("현재 보유 쿠페이머니: "+nowMember.getCoupaymoney()+"원입니다.");
+
+    // 상품을 판매한 원래 판매자를 찾아내는 함수
+    private Member findMemberByNickname(String nickname) {
+        for (Member member : mem_list) {
+            if (member.get_nickname().equals(nickname)) {
+                return member;
+            }
+        }
+        return null; // 찾지 못한 경우
     }
 
+
+
+    private void returnItem(Member nowMember) {
+        System.out.println("반품하실 물품의 이름을 입력해주세요.");
+        String item = scan.next();
+        Iterator<Product> iterator = nowMember.my_purchased.iterator();
+
+        while (iterator.hasNext()) {
+            Product purchasedProduct = iterator.next();
+
+            if (purchasedProduct.get_p_name().equals(item)) {
+                System.out.println("반품하실 수량을 입력해주세요");
+                int returnMoney = 3000;
+                int returnQuantity = scan.nextInt();
+
+                if (returnQuantity <= purchasedProduct.getQuantity()) {
+                    nowMember.setCoupaymoney(nowMember.getCoupaymoney() + returnQuantity*purchasedProduct.getPrice() - returnMoney);
+                    purchasedProduct.setQuantity(purchasedProduct.getQuantity() - returnQuantity);
+                    Member originalSeller = findMemberByNickname(purchasedProduct.get_s_name());
+
+                    if (originalSeller != null) {
+                        addProduct(originalSeller, purchasedProduct);
+                    }
+
+                    if (purchasedProduct.getQuantity() == 0) {
+                        iterator.remove(); // 반복자를 통해 안전하게 제거
+                    }
+
+                    System.out.println("반품이 완료되었습니다.");
+                } else {
+                    System.out.println("수량이 잘못되었습니다.");
+                }
+            }
+        }
+    }
+
+    private void charge() {
+        checkNowMember(nowMember);
+        Membership membership = nowMember.getMembership();
+        if (nowMember != null && membership!= null) {
+            System.out.println("현재 보유 쿠페이머니: " + nowMember.getCoupaymoney());
+            System.out.print("충전금엑: ");
+            int chargeMoney = scan.nextInt();
+                membership.rewardPoints(chargeMoney, nowMember);
+            System.out.println("충전완료.");
+            System.out.println("현재 보유 쿠페이머니: " + nowMember.getCoupaymoney() + "원입니다.");
+        }
+        else
+            System.out.println("회원이없습니다.");
+    }
     //판매
     private void sell() {
         while(true) {
@@ -295,9 +358,8 @@ public class Coupang {
                     break;
                 case 3: //이전메뉴
                     return;
+
                 default:
-                    System.out.println("잘못된 입력입니다.");
-                    System.out.println();
             }
         }
     }
