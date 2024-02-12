@@ -8,7 +8,9 @@ public class Coupang {
     Scanner scan = new Scanner(System.in); // 스캐너 : scan
     List<Member> mem_list = new ArrayList<>(); //전체 회원 리스트
     List<Product> pro_list = new ArrayList<>(); //전체 상품 리스트
+    List<Product> review_list = new ArrayList<>(); //후기게시판
     Member nowMember = new Member(); // 현재 회원이 누구인지 플래그
+
 
 
     int logout_exit_flag = 0; //메뉴창에서 바로 종료 가능하게 만들려고
@@ -202,7 +204,7 @@ public class Coupang {
         while(true) {
             if(findMember(nowMember)==null){return;}
             System.out.println("------------------------------------------------");
-            System.out.println("1.전체 상품보기 2.구매 3.판매 4.마이정보 5.쿠페이머니충전 6.로그아웃 7.종료"); // 메뉴 출력
+            System.out.println("1.전체상품보기 2.구매 3.판매 4.마이정보 5.쿠페이머니충전 6.후기 7.로그아웃 8.종료"); // 메뉴 출력
             System.out.println("------------------------------------------------");
             int input = scan.nextInt();
             switch(input) {
@@ -221,9 +223,12 @@ public class Coupang {
                 case 5: //쿠페이머니 충전
                     charge();
                     break;
-                case 6: //로그아웃
+                case 6: //후기
+                    review();
+                    break;
+                case 7: //로그아웃
                     return;
-                case 7: //종료
+                case 8: //종료
                     logout_exit_flag = 1;
                     return;
 
@@ -498,4 +503,54 @@ public class Coupang {
             }
         }
     }
+    private void review() {
+        while(true) {
+            if(findMember(nowMember)==null){return;}
+            System.out.println("------------------------------------------------");
+            System.out.println("1.후기게시판 2.후기작성 3.이전");
+            System.out.println("------------------------------------------------");
+            int input = scan.nextInt();
+            switch(input) {
+                case 1: //후기게시판
+                    printReview_list();
+                    break;
+                case 2: //후기작성
+                    review_write();
+                    break;
+                case 3: //이전
+                    return;
+                default:
+                    System.out.println("잘못된 입력입니다.");
+                    System.out.println();
+            }
+        }
+    }
+    private void printReview_list(){
+        for (int i = 0; i < review_list.size(); i++){
+            System.out.println(review_list.get(i).toString());
+            System.out.println("-> 후기 : " + review_list.get(i).getReview());
+        }
+    }
+    private void review_write() {
+        int flag = 0;
+        for (int i = 0; i < nowMember.my_purchased.size(); i++) { //배열에서 검색한 상품이 있는지 확인
+            System.out.print( flag+1 + ".");
+            System.out.println(pro_list.get(i).toString());
+            System.out.println();
+            flag++;
+        }
+        if(flag==0) {
+            System.out.println("후기작성이 가능한 상품이 존재하지 않습니다.");
+        }else{
+            System.out.println("후기를 작성할 상품의 번호를 입력해주세요(기존에 작성된 후기는 삭제됩니다.)");
+            int num = scan.nextInt();
+            if(0<num && num< nowMember.my_purchased.size()) {
+                System.out.println("후기 내용을 작성해주세요.");
+                String review_contents = scan.next();
+                nowMember.my_purchased.get(num).setReview(review_contents);
+                review_list.add(nowMember.my_purchased.get(num));
+            }else {System.out.println("잘못된 입력입니다.");}
+        }
+    }
+
 }
