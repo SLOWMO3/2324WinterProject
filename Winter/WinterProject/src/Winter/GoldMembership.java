@@ -48,7 +48,7 @@ public class GoldMembership extends Membership {
                     break;
                 }
             }
-            nowMember.set_couponService(true);
+            nowMember.set_ottService(true);
         }
     }
     public void convenienceStoreCoupon(Member nowMember) {
