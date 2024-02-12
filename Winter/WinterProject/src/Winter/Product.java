@@ -6,6 +6,10 @@ public class Product {
 	private int price;		//가격
 	private int quantity;	//수량
 
+
+
+	private String sender = null;
+
 	public Product(String p_name, int price, int quantity) {
 		this.p_name = p_name;
 		this.price = price;
@@ -26,6 +30,12 @@ public class Product {
 	public void setPrice(int price) { this.price = price; }
 	public int getQuantity() { return quantity; }
 	public void setQuantity(int quantity) { this.quantity = quantity; }
+	public void setSender(String sender) {
+		this.sender = sender;
+	}
+	public String getSender() {
+		return sender;
+	}
 
 	//equals, toString 재정의
 	@Override
