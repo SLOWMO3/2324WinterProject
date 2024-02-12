@@ -209,7 +209,7 @@ public class Coupang {
         while(true) {
             if(findMember(nowMember)==null){return;}
             System.out.println("------------------------------------------------");
-            System.out.println("1.전체상품보기 2.구매 3.판매 4.마이정보 5.쿠페이머니충전 6.후기 7.로그아웃 8.종료"); // 메뉴 출력
+            System.out.println("1.전체 상품보기 2.구매 3.판매 4.마이정보 5.쿠페이머니충전 6.선물함 7.후기 8.로그아웃 9.종료"); // 메뉴 출력
             System.out.println("------------------------------------------------");
             int input = scan.nextInt();
             switch(input) {
@@ -228,15 +228,17 @@ public class Coupang {
                 case 5: //쿠페이머니 충전
                     charge();
                     break;
-                case 6: //후기
+                case 6: // 선물확인
+                    gift();
+                case 7: //후기
                     review();
+
                     break;
-                case 7: //로그아웃
+                case 8: //로그아웃
                     return;
-                case 8: //종료
+                case 9: //종료
                     logout_exit_flag = 1;
                     return;
-
                 default:
                     System.out.println("잘못된 입력입니다.");
                     System.out.println();
@@ -433,7 +435,7 @@ public class Coupang {
         while(true){
             System.out.println("--------------------------------------");
             System.out.println("총 결제금액 : " + result + "\t잔액 : " + nowMember.getCoupaymoney());
-            System.out.println("1.결제 2.이전");
+            System.out.println("1.결제 2.선물하기 3.이전");
             System.out.println("--------------------------------------");
             int in = scan.nextInt();
             switch(in) {
@@ -441,6 +443,8 @@ public class Coupang {
                     this.doPayment(result);
                     break;
                 case 2:
+                    doSend(result);
+                case 3:
                     return;
                 default:
                     System.out.println("잘못된 입력입니다.");
@@ -489,7 +493,62 @@ public class Coupang {
             nowMember.my_cart.clear();
         }
     }
+    private void doSend(int payAmount) {
+        System.out.print("받는 사람의 ID를 입력하세요 : ");
+        int receiver_id = scan.nextInt();
+        Member receiver = findMember(new Member(receiver_id));
+        if(receiver == null){
+            System.out.println("존재하지 않는 사용자입니다.");
+        }else {
+            checkNowMember(nowMember);
+            int result = nowMember.getCoupaymoney() - payAmount;
+            if (result < 0) {
+                System.out.println("잔액이 부족하여 충전이 필요합니다.");
+            } else {
+                nowMember.setCoupaymoney((int) (nowMember.getCoupaymoney() - payAmount + (payAmount * nowMember.getMembership().DiscountP())));
+                System.out.println("결제가 완료되었습니다.");
+                System.out.println("잔액 : " + nowMember.getCoupaymoney());
+                System.out.println("--------------------------------------");
 
+                nowMember.my_purchased.addAll(nowMember.my_cart); //구매내역에 추가(같은상품이여도 따로 구매하면 따로 기록됨)
+                receiver.my_present.addAll(nowMember.my_cart);  // 받은 선물 목록에 추가
+                for(Product product : receiver.my_present){
+                    product.setSender(nowMember.get_nickname());
+                }
+
+                for (int i = 0; i < nowMember.my_cart.size(); i++) { //카트에 담은 상품 하나씩
+                    for (int j = 0; j < mem_list.size(); j++) { //해당 상품의 판매자를 찾아서
+                        if (nowMember.my_cart.get(i).get_s_name().equals(mem_list.get(j).get_nickname())) {
+                            mem_list.get(j).setTotal_SA(mem_list.get(j).getTotal_SA() + (nowMember.my_cart.get(i).getPrice() * nowMember.my_cart.get(i).getQuantity())); //해당상품 판매자의 총판매가격 증가
+                            for (int k = 0; k < mem_list.get(j).my_sale.size(); k++) {  //판매자의 판매리스트에서 삭제 또는 감소
+                                if (mem_list.get(j).my_sale.get(k).getQuantity() - nowMember.my_cart.get(i).getQuantity() == 0) { //수량이 0이되면 삭제
+                                    mem_list.get(j).my_sale.remove(nowMember.my_cart.get(i));
+                                    break;
+                                } else {
+                                    mem_list.get(j).my_sale.get(k).setQuantity(mem_list.get(j).my_sale.get(k).getQuantity() - nowMember.my_cart.get(i).getQuantity());
+                                    break;
+                                } //수량이 0이상(0이하는 카트에 안담기므로 제외)
+                            }
+                            break;
+                        }
+                    }
+                    for (int l = 0; l < pro_list.size(); l++) { //전체 상품 리스트
+                        if (nowMember.my_cart.get(i).get_s_name().equals(pro_list.get(l).get_s_name())) {
+                            if (pro_list.get(l).getQuantity() - nowMember.my_cart.get(i).getQuantity() == 0) {
+                                pro_list.remove(nowMember.my_cart.get(i));
+                                break;
+                            } else {
+                                pro_list.get(l).setQuantity(pro_list.get(l).getQuantity() - nowMember.my_cart.get(i).getQuantity());
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                nowMember.my_cart.clear();
+            }
+        }
+    }
     private void productSearch() {
         int flag = 0;
         System.out.println("찾는 상품을 검색해주세요: ");
@@ -517,12 +576,14 @@ public class Coupang {
                 break;
             }
             for (int i = 0; i < pro_list.size(); i++) { //배열에서 검색한 상품이 있는지 확인
-                if(s_name.equals(pro_list.get(i).get_p_name())) {
-                    System.out.print( flag+1 + ".");
-                    System.out.println(pro_list.get(i).toString());
-                    System.out.println();
-                    ex_list.add(pro_list.get(i));
-                    flag++;
+                if(!nowMember.get_nickname().equals(pro_list.get(i).get_s_name())) {
+                    if (s_name.equals(pro_list.get(i).get_p_name())) {
+                        System.out.print(flag + 1 + ".");
+                        System.out.println(pro_list.get(i).toString());
+                        System.out.println();
+                        ex_list.add(pro_list.get(i));
+                        flag++;
+                    }
                 }
             }
             if(flag==0) {
@@ -565,6 +626,17 @@ public class Coupang {
             }
         }
     }
+
+    private void gift(){
+        if(!nowMember.my_present.isEmpty()){
+            for(Product product : nowMember.my_present){
+                System.out.println(product + "보낸사람:" + product.getSender());
+            }
+        }else{
+            System.out.println("받은 선물이 없습니다.");
+        }
+    }
+
     private void review() {
         while(true) {
             if(findMember(nowMember)==null){return;}
@@ -614,5 +686,4 @@ public class Coupang {
             }else {System.out.println("잘못된 입력입니다.");}
         }
     }
-
 }

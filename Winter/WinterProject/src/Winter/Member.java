@@ -24,16 +24,22 @@ public class Member {
     List<Product> my_purchased = new ArrayList<>(); //구매한 상품
 	List<Product> my_sale = new ArrayList<>(); // 판매중 상품
 	List<Product> my_cart = new ArrayList<>();
+	List<Product> my_present = new ArrayList<>();
 
 	public Member(int id, String nickname) {
         this.id = id;
 		this.nickname = nickname;
 	}
 
+
+	public Member(int id) {
+		this.id = id;
+	}
+
 	public Member(String nickname) {
       this.nickname = nickname;
 	}
-
+  
 	public Member() {
 
 	}
