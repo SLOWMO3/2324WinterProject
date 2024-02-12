@@ -122,14 +122,6 @@ public class Coupang {
                     }
                 }
             }
-            for (int j = 0; j < mem.my_sale.size(); j++) {  //개인 판매중 상품 배열에서 수량을 감소시킴
-                if(mem.my_sale.get(j).equals(pro)){
-                    if(mem.my_sale.get(j).getQuantity() - pro.getQuantity() > 0){
-                        mem.my_sale.get(j).setQuantity(mem.my_sale.get(j).getQuantity() - pro.getQuantity());
-                        break;
-                    }
-                }
-            }
         }else {System.out.println("등록되지 않은 상품입니다.");}
     }
 
