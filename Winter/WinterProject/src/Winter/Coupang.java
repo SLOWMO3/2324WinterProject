@@ -269,7 +269,7 @@ public class Coupang {
                     checkNowMember(nowMember);
                     Membership membership = nowMember.getMembership();
                     if (membership != null) {
-                        membership.ShowMemberShipBenefit();
+                        membership.ShowMemberShipBenefit(nowMember);
                     } else {
                         System.out.println("Membership is null.");
                         // Handle the case where membership is null

@@ -8,6 +8,10 @@ public class Member {
 	private int coupaymoney = 0;    //보유하고있는 쿠페이머니 잔액
 	private String membershipGrade;
 	private Membership membership;
+	private boolean ottService = false;
+	private boolean couponService = false;
+
+
 	private int total_PA(){ //총구매액(purchase amount)
 		int tpa = 0;
 		for(int i = 0; i<my_purchased.size(); i++){
@@ -54,6 +58,12 @@ public class Member {
 	}
 	public String get_nickname() { return nickname; }
 	public void set_nickname(String nickname) { this.nickname = nickname; }
+	public boolean get_ottService() { return ottService; }
+	public void set_ottService(boolean ottService) { this.ottService = ottService;
+    }
+	public boolean get_couponService() { return couponService; }
+	public void set_couponService(boolean couponService) { this.couponService =couponService;
+	}
 	public String get_membershipGrade() { return membershipGrade; }
 	public void set_membershipGrade(String membershipGrade) { this.membershipGrade = membershipGrade; }
 	public int getTotal_PA() { return total_PA(); }

@@ -16,9 +16,10 @@ public class Membership {
         return 0;
     }
 
-    public void selectOttservice() {
+    public void selectOttservice(Member nowMember) {
         System.out.println("멤버쉽에 가입되어있지않아 Ott서비스를 제공받을수 없음");
     }
+
 
     public void rewardPoints(int chargemoney,Member nowMember){
         nowMember.setCoupaymoney(nowMember.getCoupaymoney() + chargemoney);
@@ -27,7 +28,7 @@ public class Membership {
 
 
 
-public void ShowMemberShipBenefit() {
+public void ShowMemberShipBenefit(Member nowMember) {
         System.out.println("멤버쉽에 가입되어있지 않아 혜택이없습니다.");
 }
 
