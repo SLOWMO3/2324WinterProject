@@ -184,9 +184,9 @@ public class Coupang {
     //로그인
     private void login() {
         while(true) {
-            System.out.println("ID를 입력해주세요.(숫자)");
+            System.out.print("ID(숫자) : ");
             int id = scan.nextInt();
-            System.out.println("닉네임을 입력해주세요.");
+            System.out.print("닉네임 : ");
             String nn = scan.next();
             Member mb = new Member(id, nn);
             Member flag = findMember(mb);
@@ -197,7 +197,6 @@ public class Coupang {
             }else {
                 nowMember = flag;
                 System.out.println("로그인에 성공하였습니다.");
-                System.out.println();
                 break;
             }
         }
@@ -381,11 +380,11 @@ public class Coupang {
     //물품등록
     private void productRegistration() {
         System.out.println("등록할 물품의 제품명,가격,수량을 입력해주세요.");
-        System.out.println("제품명: ");
+        System.out.print("제품명: ");
         String name = scan.next();
-        System.out.println("가격: ");
+        System.out.print("가격: ");
         int price = scan.nextInt();
-        System.out.println("수량: ");
+        System.out.print("수량: ");
         int Qy = scan.nextInt();
 
         Product pd = new Product(name,price,Qy);
@@ -435,22 +434,22 @@ public class Coupang {
         int result=0;
         for (Product product : nowMember.my_cart) {
             result += product.getPrice()*product.getQuantity();
-            System.out.println();
-            System.out.println("--------------------------------------");
+            System.out.println("------------------------------------------------");
             System.out.println(product);
         }
         while(true){
-            System.out.println("--------------------------------------");
+            System.out.println("------------------------------------------------");
             System.out.println("총 결제금액 : " + result + "\t잔액 : " + nowMember.getCoupaymoney());
             System.out.println("1.결제 2.선물하기 3.이전");
-            System.out.println("--------------------------------------");
+            System.out.println("------------------------------------------------");
             int in = scan.nextInt();
             switch(in) {
                 case 1:
                     this.doPayment(result);
-                    break;
+                    return;
                 case 2:
                     doSend(result);
+                    return;
                 case 3:
                     return;
                 default:
@@ -469,7 +468,7 @@ public class Coupang {
             nowMember.setCoupaymoney((int) (nowMember.getCoupaymoney() - payAmount+(payAmount * nowMember.getMembership().DiscountP())));
             System.out.println("결제가 완료되었습니다.");
             System.out.println("잔액 : " + nowMember.getCoupaymoney());
-            System.out.println("--------------------------------------");
+            System.out.println("------------------------------------------------");
 
             nowMember.my_purchased.addAll(nowMember.my_cart); //구매내역에 추가(같은상품이여도 따로 구매하면 따로 기록됨)
             for(int i = 0; i<nowMember.my_cart.size(); i++){ //카트에 담은 상품 하나씩
@@ -515,7 +514,7 @@ public class Coupang {
                 nowMember.setCoupaymoney((int) (nowMember.getCoupaymoney() - payAmount + (payAmount * nowMember.getMembership().DiscountP())));
                 System.out.println("결제가 완료되었습니다.");
                 System.out.println("잔액 : " + nowMember.getCoupaymoney());
-                System.out.println("--------------------------------------");
+                System.out.println("------------------------------------------------");
 
                 nowMember.my_purchased.addAll(nowMember.my_cart); //구매내역에 추가(같은상품이여도 따로 구매하면 따로 기록됨)
                 receiver.my_present.addAll(nowMember.my_cart);  // 받은 선물 목록에 추가
@@ -659,9 +658,10 @@ public class Coupang {
     private void review_write() {
         int flag = 0;
         for (int i = 0; i < nowMember.my_purchased.size(); i++) { //배열에서 검색한 상품이 있는지 확인
+            System.out.println("------------------------------------------------");
             System.out.print( flag+1 + ".");
             System.out.println(nowMember.my_purchased.get(i).toString());
-            System.out.println();
+            System.out.println("------------------------------------------------");
             flag++;
         }
         if(flag==0) {
@@ -669,11 +669,12 @@ public class Coupang {
         }else{
             System.out.println("후기를 작성할 상품의 번호를 입력해주세요(기존에 작성된 후기는 삭제됩니다.)");
             int num = scan.nextInt();
-            if(0<num && num< nowMember.my_purchased.size()) {
+            if(0<num && num <= nowMember.my_purchased.size()) {
                 System.out.println("후기 내용을 작성해주세요.");
                 String review_contents = scan.next();
                 nowMember.my_purchased.get(num-1).setReview(review_contents);
                 review_list.add(nowMember.my_purchased.get(num-1));
+                System.out.println("후기가 작성되었습니다.");
             }else {System.out.println("잘못된 입력입니다.");}
         }
     }
