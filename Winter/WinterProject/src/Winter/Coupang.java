@@ -318,6 +318,17 @@ public class Coupang {
                     nowMember.setCoupaymoney(nowMember.getCoupaymoney() + returnQuantity*purchasedProduct.getPrice() - returnMoney);
                     purchasedProduct.setQuantity(purchasedProduct.getQuantity() - returnQuantity);
                     Member originalSeller = findMemberByNickname(purchasedProduct.get_s_name());
+                    String s_name = purchasedProduct.get_s_name();
+                    String p_name = purchasedProduct.get_p_name();
+                    int price = purchasedProduct.getPrice();
+                    if(pro_list.contains(purchasedProduct)){
+                        int i = pro_list.indexOf(purchasedProduct);
+                        pro_list.get(i).setQuantity(pro_list.get(i).getQuantity() + returnQuantity);
+                    }else{
+                        Product p = new Product(p_name, price, returnQuantity);
+                        p.set_s_name(s_name);
+                        pro_list.add(p);
+                    }
 
                     if (originalSeller != null) {
                         addProduct(originalSeller, purchasedProduct);
