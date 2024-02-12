@@ -395,10 +395,10 @@ public class Coupang {
 
     //물품삭제
     private void productRemove() {
-        System.out.println("삭제할 상품의 제품명과 삭제할 수량을 입력해주세요 :");
-        System.out.println("제품명: ");
+        System.out.println("삭제할 상품의 제품명과 삭제할 수량을 입력해주세요.");
+        System.out.print("제품명: ");
         String removename = scan.next();
-        System.out.println("수량: ");
+        System.out.print("수량: ");
         int removeQy = scan.nextInt();
         Product removepd = new Product(removename,removeQy);
 
