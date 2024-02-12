@@ -1,12 +1,9 @@
 package Winter.WinterProject.src.Winter;
 
 public class GoldMembership extends Membership {
-    private boolean ottService = false;
-    private boolean couponService = false;
+
     public GoldMembership(Member member) {
         super(member);
-        ottService = false;
-        couponService = false;
     }
 
     @Override
@@ -22,8 +19,8 @@ public class GoldMembership extends Membership {
     }
 
     @Override
-    public void selectOttservice() {
-        if (ottService) {
+    public void selectOttservice(Member nowMember) {
+        if (nowMember.get_ottService()) {
             System.out.println("이미 받으신 혜택입니다.");
         }
         else {
@@ -51,11 +48,11 @@ public class GoldMembership extends Membership {
                     break;
                 }
             }
-            ottService = true;
+            nowMember.set_couponService(true);
         }
     }
-    public void convenienceStoreCoupon() {
-        if (couponService) {
+    public void convenienceStoreCoupon(Member nowMember) {
+        if (nowMember.get_couponService()) {
             System.out.println("이미 받으신 혜택입니다.");
         } else {
             System.out.println("골드멤버쉽혜택으로 편의점쿠폰을 받을 수 있습니다. 쿠폰의 금액은 3만원입니다.");
@@ -80,21 +77,21 @@ public class GoldMembership extends Membership {
                 }
 
             }
-            couponService = true;
+           nowMember.set_couponService(true);
         }
     }
 
-    public void ShowMemberShipBenefit() {
+    public void ShowMemberShipBenefit(Member nowMember) {
         System.out.println("골드 멤버쉽으로 혜택은 다음과 같습니다.");
         System.out.println("1.쿠페이머니 15퍼 추가적립  2.물품구매시 15퍼센트 할인  3.5개의 Ott 서비스중 1개의 서비스 지원  4.원하는편의점쿠폰 발급");
         System.out.println("Ott서비스와 쿠폰서비스혜택은 현재 창에서 바로 받아보실수 있습니다. Ott서비스를원하시면 ott를, 쿠폰서비스혜택을원하시면 쿠폰을 입력해주세요");
         String benefit = scan.next();
         switch (benefit) {
             case "ott" : {
-                selectOttservice();
+                selectOttservice(nowMember);
                 break;
             }
-            case "쿠폰" : convenienceStoreCoupon();
+            case "쿠폰" : convenienceStoreCoupon(nowMember);
             break;
         }
     }

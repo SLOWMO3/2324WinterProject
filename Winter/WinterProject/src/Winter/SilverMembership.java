@@ -20,8 +20,8 @@ public class SilverMembership extends Membership {
     }
 
     @Override
-    public void selectOttservice() {
-        if(ottService){
+    public void selectOttservice(Member nowMember) {
+        if(nowMember.get_ottService()){
             System.out.println("이미 받으신 혜택입니다.");
         }
         System.out.println("실버 멤버쉽으로 쿠팡플레이, 티빙, 넷플릭스중 하나를 선택해 OTT서비스를 제공받을 수 있습니다. 제공받을 서비스를 선택해주세요.");
@@ -40,16 +40,16 @@ public class SilverMembership extends Membership {
                 break;
             }
         }
-        ottService = true;
+       nowMember.set_ottService(true);
     }
 
-    public void ShowMemberShipBenefit() {
+    public void ShowMemberShipBenefit(Member nowMember) {
         System.out.println("실버 멤버쉽으로 혜택은 다음과 같습니다.");
         System.out.println("1.쿠페이머니 10퍼 추가적립  2.물품구매시 10퍼센트 할인   3.3가지의 Ott서비스중 한가지 서비스 제공");
         System.out.println("Ott서비스는 현재 창에서 혜택을 바로 받아보실수 있으십니다. 혜택을 받기를 원하시면 Y를 입력해주세요 ");
         String Ott = scan.next();
         if(Ott.equals("Y")){
-        selectOttservice();
+        selectOttservice(nowMember);
         }
         else return;
 
