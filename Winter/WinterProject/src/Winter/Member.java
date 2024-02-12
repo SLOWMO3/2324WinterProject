@@ -30,10 +30,13 @@ public class Member {
 		this.nickname = nickname;
 	}
 
+	public Member(String nickname) {
+      this.nickname = nickname;
+	}
+
 	public Member() {
 
 	}
-
 	//get/set 메소드
 	public int get_id() { return id; }
 	public void set_id(int id) { this.id = id; }
@@ -56,6 +59,27 @@ public class Member {
 	}
 	public void setCoupaymoney(int coupaymoney) {
 		this.coupaymoney = coupaymoney;
+	}
+
+	public void updateMembershipGrade(Member nowMember) {
+		int combinedAmount = nowMember.getTotal_PA()+nowMember.getTotal_SA();
+
+
+		if (combinedAmount >= 150000) {
+			nowMember.set_membershipGrade("Gold");
+			// Add Gold membership benefit
+			// ...
+		} else if (combinedAmount >= 100000) {
+			nowMember.set_membershipGrade("Silver");
+			// Add Silver membership benefits
+			// ...
+		} else if (combinedAmount >= 50000) {
+			nowMember.set_membershipGrade("Bronze");
+			// Add Bronze membership benefits
+			// ...
+		}
+		else nowMember.set_membershipGrade("No MemberShip");
+
 	}
 
 	//equals, toString 재정의
