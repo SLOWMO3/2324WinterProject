@@ -12,21 +12,10 @@ public class BronzeMemberShip extends Membership{
         return 0.05;
     }
 
-    public String convenienceStoreCoupon() {
-        System.out.println("이 혜택은 골드멤버쉽부터 적용됩니다.");
-        return null;
-    }
-
     @Override
-    public void selectOttservice() {
-        System.out.println("브론즈 멤버쉽은 Ott서비스가 제공되지 않습니다.");
-    }
-
-
-    @Override
-    public void rewardPoints(int chargemoney){
-        member.setCoupaymoney(member.getCoupaymoney() + chargemoney + (int) (0.05 * chargemoney));
-        System.out.println("브론즈 멤버쉽으로 5퍼센트만큼의 추가 쿠페이머니 적립이있습니다. " + member.getCoupaymoney());
+    public void rewardPoints(int chargemoney,Member nowMember){
+        nowMember.setCoupaymoney(nowMember.getCoupaymoney() + chargemoney + (int) (0.05 * chargemoney));
+        System.out.println("브론즈 멤버쉽으로 5퍼센트만큼의 추가 쿠페이머니 적립이있습니다. " + nowMember.getCoupaymoney());
     }
 
     public void ShowMemberShipBenefit() {

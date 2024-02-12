@@ -5,6 +5,7 @@ public class Product {
 	private String s_name;	//판매자(seller name)
 	private int price;		//가격
 	private int quantity;	//수량
+	private String review = null; //리뷰
 
 
 
@@ -30,12 +31,17 @@ public class Product {
 	public void setPrice(int price) { this.price = price; }
 	public int getQuantity() { return quantity; }
 	public void setQuantity(int quantity) { this.quantity = quantity; }
+
 	public void setSender(String sender) {
 		this.sender = sender;
 	}
 	public String getSender() {
 		return sender;
 	}
+
+	public String getReview() { return review; }
+	public void  setReview(String review) {this.review = review;}
+
 
 	//equals, toString 재정의
 	@Override
@@ -49,5 +55,4 @@ public class Product {
 	public String toString() {
 		return "상품명:" + p_name + " 가격:" + price + " 판매자:" + s_name + " 수량:" + quantity;
 	}
-
 }
