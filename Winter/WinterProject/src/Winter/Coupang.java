@@ -321,13 +321,13 @@ public class Coupang {
                     String s_name = purchasedProduct.get_s_name();
                     String p_name = purchasedProduct.get_p_name();
                     int price = purchasedProduct.getPrice();
-                    if(pro_list.contains(purchasedProduct)){
-                        int i = pro_list.indexOf(purchasedProduct);
-                        pro_list.get(i).setQuantity(pro_list.get(i).getQuantity() + returnQuantity);
+                    if(originalSeller.my_sale.contains(purchasedProduct)){
+                        int i = originalSeller.my_sale.indexOf(purchasedProduct);
+                        originalSeller.my_sale.get(i).setQuantity(originalSeller.my_sale.get(i).getQuantity() + returnQuantity);
                     }else{
                         Product p = new Product(p_name, price, returnQuantity);
                         p.set_s_name(s_name);
-                        pro_list.add(p);
+                        originalSeller.my_sale.add(p);
                     }
 
                     if (originalSeller != null) {
